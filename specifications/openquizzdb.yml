@@ -1,0 +1,123 @@
+openapi: '3.0.2'
+info:
+  title: OpenQuizzDB API
+  version: '1.0'
+servers:
+  - url: https://www.openquizzdb.org/
+paths:
+  /api.php:
+    get:
+      parameters:
+        - in: query
+          name: key
+          required: true
+          schema:
+            type: string
+            default : 79K8VZKGU6
+          description: votre clé API personnelle, standard ou PREMIUM. Requis lors de chaque appel API.
+        - in: query
+          name: lang
+          required: false
+          schema:
+            type: string
+            enum:
+              - fr
+              - en
+              - es
+              - it
+              - de
+              - nl
+            default: fr
+          description: langue de retour à utiliser (fr, en, es, it, de, nl).
+        - in: query
+          name: amount
+          required: false
+          schema:
+            type: integer
+            maximum: 30
+            default: 1
+          description: nombre de quizz à renvoyer pour cet appel (1 à 30).
+        - in: query
+          name: choice
+          required: false
+          schema:
+            type: integer
+            enum: [1, 2, 3, 4]
+            default: 4
+          description: nombre de propositions de réponse à renvoyer (1, 2, 3, 4).
+        - in: query
+          name: categ
+          required: false
+          schema:
+            type: string
+          description: catégorie à parcourir
+        - in: query
+          name: diff
+          required: false
+          schema:
+            type: integer
+            enum: [1, 2, 3]
+          description: niveau de difficulté (1=débutant, 2=confirmé, 3=expert).
+        - in: query
+          name: anec
+          required: false
+          schema:
+            type: integer
+            enum: [0,1]
+            default: 0
+          description: inclure une anecdote permettant d'apporter un complément d'information à la question posée (0, 1)
+        - in: query
+          name: wiki
+          required: false
+          schema:
+            type: integer
+            enum: [0,1]
+            default: 0
+          description: inclure le lien Wikipédia relatif à la question posée (0, 1).
+        - in: query
+          name: repeat
+          required: false
+          schema:
+            type: integer
+            enum: [0,1]
+            default: 0
+          description:  permet de spécifier si l’on souhaite récupérer du contenu déjà envoyé par l’API (0, 1)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+
+components:
+  schemas:
+    QueryResponse:
+      type: object
+      properties:
+        response_code:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/Quiz"
+
+    Quiz:
+      type: object
+      properties:
+        categorie:
+          type: string
+        theme:
+          type: string
+        difficulte:
+          type: string
+        question:
+          type: string
+        reponse_correcte:
+          type: string
+        autres_choix:
+          type: array
+          items:
+            type: string
+        wikipedia:
+          type: string

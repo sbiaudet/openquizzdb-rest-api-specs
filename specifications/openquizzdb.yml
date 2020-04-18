@@ -13,7 +13,6 @@ paths:
           required: true
           schema:
             type: string
-            default : 79K8VZKGU6
           description: votre clé API personnelle, standard ou PREMIUM. Requis lors de chaque appel API.
         - in: query
           name: lang
